@@ -18,10 +18,11 @@ service:
 ingress:
   enabled: true
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/redirect-entry-point: https
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernete.io/router.tls.certresolver: default
+    traefik.ingress.kubernetes.io/router.tls.certresolver: default
     traefik.ingress.kubernetes.io/router.tls.domains.0.main: topkek.cloud
     traefik.ingress.kubernetes.io/router.tls.domains.0.sans: grafana.topkek.cloud
   labels: {}
@@ -29,3 +30,7 @@ ingress:
     - grafana.topkek.cloud
   path: /
   pathType: Prefix
+  tls:
+    - hosts:
+        - grafana.topkek.cloud
+      secretName: grafana-topkek-cloud-tls
