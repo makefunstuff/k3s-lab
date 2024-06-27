@@ -1,0 +1,31 @@
+adminUser: admin
+adminPassword: secret
+persistence:
+  enabled: true
+  size: 5Gi
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server
+        access: proxy
+        isDefault: true
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  annotations:
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernete.io/router.tls.certresolver: default
+    traefik.ingress.kubernetes.io/router.tls.domains.0.main: topkek.cloud
+    traefik.ingress.kubernetes.io/router.tls.domains.0.sans: grafana.topkek.cloud
+  labels: {}
+  hosts:
+    - grafana.topkek.cloud
+  path: /
+  pathType: Prefix

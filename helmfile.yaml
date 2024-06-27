@@ -1,2 +1,3 @@
 helmfiles:
-  - path: ./third-party/gitea/helmfile.yaml
+  - path: ./third-party/prometheus/helmfile.yaml
+  - path: ./third-party/grafana/helmfile.yaml
