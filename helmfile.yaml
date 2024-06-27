@@ -1,3 +1,4 @@
 helmfiles:
   - path: ./third-party/prometheus/helmfile.yaml
   - path: ./third-party/grafana/helmfile.yaml
+  - path: ./third-party/nginx/helmfile.yaml
