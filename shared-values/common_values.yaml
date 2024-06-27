@@ -1,0 +1,3 @@
+global:
+  logLevel: INFO
+  storageClass: "standard"

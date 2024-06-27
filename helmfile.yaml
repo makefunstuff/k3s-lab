@@ -1,0 +1,2 @@
+helmfiles:
+  - path: ./third-party/gitea/helmfile.yaml

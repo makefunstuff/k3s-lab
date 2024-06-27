@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  registry: docker.io
+  repository: bitnami/gitea
+  tag: 1.14.2
+
+service:
+  type: LoadBalancer
+  port: 3000
+
+ingress:
+  enabled: true
+  hostname: gitea.localhost
+  path: /
+  tls: false
+
+gitea:
+  admin:
+    username: admin
+    password: adminpassword
+    email: admin@example.com
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 250m
+  limits:
+    memory: 1Gi
+    cpu: 500m
