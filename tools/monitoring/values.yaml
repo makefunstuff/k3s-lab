@@ -143,7 +143,6 @@ elasticsearch:
     resources:
       requests:
         storage: 30Gi
-
   master:
     resources:
       requests:
@@ -152,6 +151,15 @@ elasticsearch:
       limits:
         cpu: "1"
         memory: "4Gi"
+    replicas: 3
+    persistence:
+      enabled: true
+      size: 30Gi
+    extraEnvs:
+      - name: discovery.seed_hosts
+        value: "elasticsearch-master-0,elasticsearch-master-1,elasticsearch-master-2"
+      - name: cluster.initial_master_nodes
+        value: "elasticsearch-master-0,elasticsearch-master-1,elasticsearch-master-2"
 
   data:
     resources:
@@ -161,6 +169,10 @@ elasticsearch:
       limits:
         cpu: "1"
         memory: "4Gi"
+    replicas: 3
+    persistence:
+      enabled: true
+      size: 30Gi
 
   ingest:
     resources:
@@ -170,6 +182,7 @@ elasticsearch:
       limits:
         cpu: "1"
         memory: "4Gi"
+    replicas: 2
 
 opentelemetry-collector:
   mode: deployment
@@ -204,7 +217,6 @@ opentelemetry-collector:
 
 logstash:
   enabled: true
-  image: "docker.elastic.co/logstash/logstash:7.17.3"
   resources:
     requests:
       cpu: "500m"
