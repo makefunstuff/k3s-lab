@@ -1,0 +1,11 @@
+apiVersion: v2
+name: elasticsearch-logstash
+description: A Helm chart for deploying Elasticsearch and Logstash
+version: 0.1.0
+dependencies:
+  - name: elasticsearch
+    version: 8.5.1
+    repository: "https://helm.elastic.co"
+  - name: logstash
+    version: 8.5.1
+    repository: "https://helm.elastic.co"
