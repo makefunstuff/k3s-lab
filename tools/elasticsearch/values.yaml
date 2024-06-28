@@ -8,8 +8,8 @@ elasticsearch:
       requests:
         storage: 10Gi
   networkPolicy:
-    http: true
-    transport: true
+    http:
+      enabled: true
     additionalRules:
     - podSelector:
         matchLabels:
