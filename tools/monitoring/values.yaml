@@ -54,10 +54,10 @@ opentelemetry-collector:
     receivers:
       otlp:
         protocols:
-          grpc:
-          http:
+          grpc: {}
+          http: {}
     processors:
-      batch:
+      batch: {}
     exporters:
       prometheusremotewrite:
         endpoint: "http://prometheus-server.monitoring.svc.cluster.local/api/v1/write"
