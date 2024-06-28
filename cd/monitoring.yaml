@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/makefunstuff/k3s-lab'
     targetRevision: HEAD
-    path: monitoring
+    path: tools/monitoring
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
