@@ -7,6 +7,9 @@ elasticsearch:
     resources:
       requests:
         storage: 10Gi
+  networkPolicy:
+    http: true
+    transport: true
   labels:
     app.kubernetes.io/name: elasticsearch
 logstash:
@@ -31,7 +34,7 @@ logstash:
       }
       output {
         elasticsearch {
-          hosts => ["http://elasticsearch-master:9200"]
+          hosts => ["http://elasticsearch-master.monitoring.svc.cluster.local:9200"]
           index => "logstash-%{+YYYY.MM.dd}"
         }
       }
