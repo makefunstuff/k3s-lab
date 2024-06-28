@@ -2,6 +2,6 @@
 
 Different experiments with home k3s clusterk
 
-- [ ] setup argocd
+- [x] setup argocd
 - [ ] create helm chart for grafana stack with otel elastic and prometheus
 - [ ] create helm chart with poc nginx
