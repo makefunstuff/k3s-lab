@@ -50,7 +50,7 @@ elasticsearch:
         storage: 30Gi
 
 opentelemetry-collector:
-  mode: "deployment"
+  mode: deployment
   image:
     repository: otel/opentelemetry-collector
     tag: "latest"
@@ -67,9 +67,6 @@ opentelemetry-collector:
         endpoint: "http://prometheus-server.monitoring.svc.cluster.local/api/v1/write"
       logging:
         loglevel: debug
-      elasticsearch:
-        endpoints: ["http://elasticsearch-master.monitoring.svc.cluster.local:9200"]
-        index: "otel-logs-%{+yyyy.MM.dd}"
     service:
       pipelines:
         metrics:
@@ -79,5 +76,5 @@ opentelemetry-collector:
         logs:
           receivers: [otlp]
           processors: [batch]
-          exporters: [logging, elasticsearch]
+          exporters: [logging]
 
