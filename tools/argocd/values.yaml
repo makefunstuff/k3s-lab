@@ -1,0 +1,22 @@
+argo-cd:
+  global:
+    domain: argocd.topkek.cloud
+
+  configs:
+    params:
+      server.insecure: true
+
+  server:
+    ingress:
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
+        traefik.ingress.kubernetes.io/redirect-entry-point: https
+      enabled: true
+      ingressClass: traefik
+      extraTls:
+        - hosts:
+          - argocd.topkek.cloud
+          secretName: argocd-tls
