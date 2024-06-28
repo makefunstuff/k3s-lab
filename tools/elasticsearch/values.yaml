@@ -5,12 +5,7 @@ elasticsearch:
     accessModes: [ "ReadWriteOnce" ]
     resources:
       requests:
-        cpu: "100m"
-        memory: "512M"
         storage: 30Gi
-      limits:
-        cpu: "1000m"
-        memory: "512M"
   labels:
     app: elasticsearch-master
   networkPolicy:
