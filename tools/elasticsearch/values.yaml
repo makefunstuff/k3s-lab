@@ -10,23 +10,25 @@ elasticsearch:
   labels:
     app.kubernetes.io/name: elasticsearch
   networkPolicy:
+    http:
       enabled: true
-      allowExternal: false
-      ingress:
-        - from:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: logstash
-          ports:
-            - protocol: TCP
-              port: 9200
-        - from:
-            - podSelector:
-                matchLabels:
-                  app.kubernetes.io/name: grafana
-          ports:
-            - protocol: TCP
-              port: 9200
+    transport:
+      enabled: true
+    additionalRules:
+      - from:
+          - podSelector:
+              matchLabels:
+                app.kubernetes.io/name: logstash
+        ports:
+          - protocol: TCP
+            port: 9200
+      - from:
+          - podSelector:
+              matchLabels:
+                app.kubernetes.io/name: grafana
+        ports:
+          - protocol: TCP
+            port: 9200
 logstash:
   enabled: true
   replicas: 1
