@@ -76,6 +76,4 @@ opentelemetry-collector:
           receivers: [otlp]
           processors: [batch]
           exporters: [logging, elasticsearch]
-  otelcol:
-    enabled: true
 
