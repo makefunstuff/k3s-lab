@@ -1,0 +1,9 @@
+prometheus:
+  alertmanager:
+    enabled: true
+
+  pushgateway:
+    enabled: true
+
+  server:
+    enabled: true

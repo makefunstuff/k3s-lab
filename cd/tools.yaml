@@ -9,6 +9,8 @@ spec:
       elements:
       - chart: grafana
         path: tools/grafana
+      - chart: prometheus
+        path: tools/prometheus
   template:
     metadata:
       name: '{{chart}}'
