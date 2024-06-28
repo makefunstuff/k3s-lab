@@ -5,7 +5,6 @@ grafana:
   ingress:
     enabled: true
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
       traefik.ingress.kubernetes.io/router.tls: "true"
       traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
@@ -17,14 +16,6 @@ grafana:
       - hosts:
           - grafana.topkek.cloud
         secretName: grafana-tls
-
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
 
   datasources:
     datasources.yaml:
@@ -46,185 +37,49 @@ grafana:
 prometheus:
   alertmanager:
     enabled: true
-    resources:
-      requests:
-        cpu: "100m"
-        memory: "128Mi"
-      limits:
-        cpu: "200m"
-        memory: "256Mi"
   pushgateway:
     enabled: true
-    resources:
-      requests:
-        cpu: "50m"
-        memory: "64Mi"
-      limits:
-        cpu: "100m"
-        memory: "128Mi"
   server:
     enabled: true
-    resources:
-      requests:
-        cpu: "200m"
-        memory: "256Mi"
-      limits:
-        cpu: "400m"
-        memory: "512Mi"
-    extraScrapeConfigs:
-      - job_name: 'kubernetes-pods'
-        kubernetes_sd_configs:
-          - role: pod
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-            action: keep
-            regex: true
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
-            action: replace
-            target_label: __metrics_path__
-            regex: (.+)
-          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
-            action: replace
-            target_label: __address__
-            regex: ([^:]+)(?::\d+)?;(\d+)
-            replacement: $1:$2
-          - action: labelmap
-            regex: __meta_kubernetes_pod_label_(.+)
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_pod_name]
-            action: replace
-            target_label: kubernetes_pod_name
-
-      - job_name: 'kubernetes-nodes'
-        kubernetes_sd_configs:
-          - role: node
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_node_label_(.+)
-
-      - job_name: 'kubernetes-apiservers'
-        kubernetes_sd_configs:
-          - role: endpoints
-            namespaces:
-              names:
-                - default
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
-            action: keep
-            regex: default;kubernetes;https
-
-      - job_name: 'kubernetes-cadvisor'
-        kubernetes_sd_configs:
-          - role: node
-        scheme: https
-        tls_config:
-          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-          insecure_skip_verify: true
-        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_node_label_(.+)
-          - target_label: __address__
-            replacement: kubernetes.default.svc.cluster.local:443
-          - source_labels: [__meta_kubernetes_node_name]
-            regex: (.+)
-            target_label: node
-          - source_labels: [__meta_kubernetes_node_name]
-            regex: (.+)
-            target_label: instance
-          - target_label: __metrics_path__
-            replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
-
-      - job_name: 'kubernetes-service-endpoints'
-        kubernetes_sd_configs:
-          - role: endpoints
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
-            action: keep
-            regex: true
-          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
-            action: replace
-            target_label: __scheme__
-            regex: (https?)
-          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
-            action: replace
-            target_label: __metrics_path__
-            regex: (.+)
-          - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
-            action: replace
-            target_label: __address__
-            regex: ([^:]+)(?::\d+)?;(\d+)
-            replacement: $1:$2
-          - action: labelmap
-            regex: __meta_kubernetes_service_label_(.+)
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            action: replace
-            target_label: kubernetes_name
 
 elasticsearch:
   volumeClaimTemplate:
     accessModes: [ "ReadWriteOnce" ]
     resources:
       requests:
-        storage: 5Gi # Reduced storage for resource-limited environments
-  master:
-    resources:
-      requests:
-        cpu: "250m"
-        memory: "512Mi"
-      limits:
-        cpu: "500m"
-        memory: "1Gi"
-    replicas: 1
-    persistence:
-      enabled: true
-      size: 5Gi
-    extraEnvs:
-      - name: discovery.seed_hosts
-        value: "elasticsearch-master-0.elasticsearch-master.monitoring.svc.cluster.local"
-      - name: cluster.initial_master_nodes
-        value: "elasticsearch-master-0"
+        storage: 30Gi
 
-  data:
+logstash:
+  enabled: true
+  volumeClaimTemplate:
+    accessModes: [ "ReadWriteOnce" ]
     resources:
       requests:
-        cpu: "250m"
-        memory: "512Mi"
-      limits:
-        cpu: "500m"
-        memory: "1Gi"
-    replicas: 1
-    persistence:
-      enabled: true
-      size: 5Gi
-
-  ingest:
-    resources:
-      requests:
-        cpu: "250m"
-        memory: "512Mi"
-      limits:
-        cpu: "500m"
-        memory: "1Gi"
-    replicas: 1
+        storage: 10Gi
+  logstashConfig:
+    logstash.yml: |
+      http.host: "0.0.0.0"
+      xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch-master:9200" ]
+    logstashPipeline:
+      logstash.conf: |
+        input {
+          tcp {
+            port => 5044
+            codec => json
+          }
+        }
+        output {
+          elasticsearch {
+            hosts => ["http://elasticsearch-master:9200"]
+            index => "logstash-%{+YYYY.MM.dd}"
+          }
+        }
 
 opentelemetry-collector:
   mode: deployment
   image:
     repository: otel/opentelemetry-collector
     tag: "latest"
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
   config:
     receivers:
       otlp:
@@ -233,48 +88,23 @@ opentelemetry-collector:
           http: {}
     processors:
       batch: {}
-      resource:
-        attributes:
-          - key: k8s.pod.name
-            from_attribute: k8s.pod.uid
-          - key: k8s.namespace.name
-            from_attribute: k8s.namespace.uid
     exporters:
       prometheusremotewrite:
         endpoint: "http://prometheus-server.monitoring.svc.cluster.local/api/v1/write"
       logging:
         loglevel: debug
+      otlp:
+        endpoint: "http://logstash.monitoring.svc.cluster.local:5044"
+        tls:
+          insecure: true
     service:
       pipelines:
         metrics:
           receivers: [otlp]
           processors: [batch]
           exporters: [prometheusremotewrite]
-
-logstash:
-  enabled: true
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "200m"
-      memory: "256Mi"
-  config:
-    logstash.yml: |
-      http.host: "0.0.0.0"
-      xpack.monitoring.enabled: true
-      xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch-master.monitoring.svc.cluster.local:9200" ]
-    logstash.conf: |
-      input {
-        beats {
-          port => 5044
-        }
-      }
-      output {
-        elasticsearch {
-          hosts => ["http://elasticsearch-master.monitoring.svc.cluster.local:9200"]
-          index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
-        }
-      }
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp]
 
