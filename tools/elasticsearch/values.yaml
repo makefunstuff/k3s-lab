@@ -6,6 +6,8 @@ elasticsearch:
     accessModes: [ "ReadWriteOnce" ]
     resources:
       requests:
+        cpu: "1000m"
+        memory: "4Gi"
         storage: 30Gi
   labels:
     app: elasticsearch-master
