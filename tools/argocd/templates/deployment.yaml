@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  replicas: { { .Values.replicas "1" } }
+  selector:
+    matchLabels:
+      app: argocd-server
+  template:
+    metadata:
+      labels:
+        app: argocd-server
+    spec:
+      containers:
+        - name: argocd-server
+          image: argoproj/argocd:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ARGOCD_SERVER_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: argocd-server
+                  key: admin.password

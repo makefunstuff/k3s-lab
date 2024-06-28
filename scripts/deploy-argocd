@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+
+if kubectl get namespace argocd; then
+  echo "Namespace 'argocd' alreay exists. Doing nothing"
+else
+  echo "Creating argocd namespace"
+  kubectl create namespace argocd
+fi
+

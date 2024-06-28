@@ -1,0 +1,9 @@
+namespace: argocd
+ingress:
+  enabled: true
+  hostname: argocd.topkek.cloud
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+  tls:
+    enabled: true
+    secretName: argocd-tls
