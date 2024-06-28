@@ -1,0 +1,20 @@
+global:
+  namespace: default
+
+grafana:
+  ingress:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - grafana.topkek.cloud
+    path: /
+    tls:
+      - hosts:
+          - grafana.topkek.cloud
+        secretName: grafana-tls
+

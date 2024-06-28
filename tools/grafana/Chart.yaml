@@ -1,0 +1,10 @@
+apiVersion: v2
+name: grafana
+description: A Helm chart for setting up Grafana, Prometheus, Elasticsearch, and OpenTelemetry Collector
+version: 0.1.0
+appVersion: "1.0"
+
+dependencies:
+  - name: grafana
+    version: 8.2.0
+    repository: "https://grafana.github.io/helm-charts"
