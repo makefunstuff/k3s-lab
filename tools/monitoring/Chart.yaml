@@ -17,4 +17,7 @@ dependencies:
   - name: opentelemetry-collector
     version: 0.96.0
     repository: "https://open-telemetry.github.io/opentelemetry-helm-charts"
+  - name: logstash
+    version: 8.5.1
+    repository: https://helm.elastic.co
 
