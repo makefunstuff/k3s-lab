@@ -50,6 +50,7 @@ elasticsearch:
         storage: 30Gi
 
 opentelemetry-collector:
+  mode: "deployment"
   image:
     repository: otel/opentelemetry-collector
     tag: "latest"
