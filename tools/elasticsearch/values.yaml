@@ -15,16 +15,10 @@ elasticsearch:
             - podSelector:
                 matchLabels:
                   app.kubernetes.io/name: logstash
-          ports:
-            - protocol: TCP
-              port: 9200
         - from:
             - podSelector:
                 matchLabels:
                   app.kubernetes.io/name: grafana
-          ports:
-            - protocol: TCP
-              port: 9200
   labels:
     app.kubernetes.io/name: elasticsearch
 
