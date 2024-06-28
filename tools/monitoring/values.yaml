@@ -50,6 +50,9 @@ elasticsearch:
         storage: 30Gi
 
 opentelemetry-collector:
+  image:
+    repository: otel/opentelemetry-collector
+    tag: "latest"
   config:
     receivers:
       otlp:
