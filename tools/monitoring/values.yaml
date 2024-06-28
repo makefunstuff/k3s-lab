@@ -9,6 +9,7 @@ grafana:
       traefik.ingress.kubernetes.io/router.tls: "true"
       traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
       traefik.ingress.kubernetes.io/redirect-entry-point: https
+      cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
       - grafana.topkek.cloud
     path: /
