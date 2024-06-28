@@ -2,6 +2,12 @@ global:
   namespace: monitoring
 
 grafana:
+  deployment:
+    labels:
+      app.kubernetes.io/name: grafana
+  service:
+    labels:
+      app.kubernetes.io/name: grafana
   ingress:
     enabled: true
     annotations:
