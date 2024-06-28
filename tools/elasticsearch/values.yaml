@@ -7,9 +7,6 @@ elasticsearch:
     resources:
       requests:
         storage: 10Gi
-  networkPolicy:
-    http:
-      enabled: true
   labels:
     app.kubernetes.io/name: elasticsearch
 
