@@ -2,17 +2,22 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-ingress
-  namespace: { { .Values.namespace } }
+  namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/ingress.class:
-      { { .Values.ingress.annotations."kubernetes.io/ingress.class" } }
+      {{ .Values.ingress.annotations.kubernetes_io_ingress_class }}
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
     traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/router.tls.domains.0.main: topkek.cloud
+    traefik.ingress.kubernetes.io/router.tls.domains.0.sans: argocd.topkek.cloud
     traefik.ingress.kubernetes.io/ssl-redirect: "true"
     traefik.ingress.kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: { { .Values.ingress.hostname } }
+    - host: {{ .Values.ingress.hostname }}
       http:
         paths:
           - path: /
@@ -24,5 +29,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - { { .Values.ingress.hostname } }
-      secretName: { { .Values.ingress.tls.secretName } }
+        - {{ .Values.ingress.hostname }}
+      secretName: {{ .Values.ingress.tls.secretName }}

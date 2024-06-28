@@ -9,7 +9,7 @@ metadata:
   name: argocd-server
   namespace: argocd
 spec:
-  replicas: { { .Values.replicas "1" } }
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: argocd-server
@@ -27,5 +27,6 @@ spec:
             - name: ARGOCD_SERVER_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: argocd-server
+                  name: argocd-secret
                   key: admin.password
+
