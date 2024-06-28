@@ -1,0 +1,81 @@
+global:
+  namespace: monitoring
+
+grafana:
+  ingress:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+    hosts:
+      - grafana.topkek.cloud
+    path: /
+    tls:
+      - hosts:
+          - grafana.topkek.cloud
+        secretName: grafana-tls
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://prometheus-server.monitoring.svc.cluster.local
+          isDefault: true
+        - name: Elasticsearch
+          type: elasticsearch
+          access: proxy
+          url: http://elasticsearch-master.monitoring.svc.cluster.local:9200
+          jsonData:
+            esVersion: 7
+            timeField: "@timestamp"
+
+prometheus:
+  alertmanager:
+    enabled: true
+  pushgateway:
+    enabled: true
+  server:
+    enabled: true
+
+elasticsearch:
+  volumeClaimTemplate:
+    accessModes: [ "ReadWriteOnce" ]
+    resources:
+      requests:
+        storage: 30Gi
+
+opentelemetry-collector:
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+    processors:
+      batch:
+    exporters:
+      prometheusremotewrite:
+        endpoint: "http://prometheus-server.monitoring.svc.cluster.local/api/v1/write"
+      logging:
+        loglevel: debug
+      elasticsearch:
+        endpoints: ["http://elasticsearch-master.monitoring.svc.cluster.local:9200"]
+        index: "otel-logs-%{+yyyy.MM.dd}"
+    service:
+      pipelines:
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [prometheusremotewrite]
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [logging, elasticsearch]
+  otelcol:
+    enabled: true
+
