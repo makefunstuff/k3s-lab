@@ -1,5 +1,5 @@
 global:
-  namespace: monitoring
+  namespace: default
 
 grafana:
   ingress:
@@ -25,12 +25,12 @@ grafana:
         - name: Prometheus
           type: prometheus
           access: proxy
-          url: http://prometheus-server.monitoring.svc.cluster.local
+          url: http://prometheus-server.default.svc.cluster.local
           isDefault: true
         - name: Elasticsearch
           type: elasticsearch
           access: proxy
-          url: http://elasticsearch-master.monitoring.svc.cluster.local:9200
+          url: http://elasticsearch-master.default.svc.cluster.local:9200
           jsonData:
             esVersion: 7
             timeField: "@timestamp"
@@ -91,11 +91,11 @@ opentelemetry-collector:
       batch: {}
     exporters:
       prometheusremotewrite:
-        endpoint: "http://prometheus-server.monitoring.svc.cluster.local/api/v1/write"
+        endpoint: "http://prometheus-server.default.svc.cluster.local/api/v1/write"
       logging:
         loglevel: debug
       otlp:
-        endpoint: "http://logstash.monitoring.svc.cluster.local:5044"
+        endpoint: "http://logstash.default.svc.cluster.local:5044"
         tls:
           insecure: true
     service:
