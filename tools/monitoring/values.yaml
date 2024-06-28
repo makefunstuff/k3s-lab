@@ -155,11 +155,15 @@ opentelemetry-collector:
         protocols:
           grpc: {}
           http: {}
-      k8s_logs:
+      filelog:
+        include: ["/var/log/containers/*.log"]
         operators:
-          - type: extract
-            config:
-              from: kubernetes.annotations
+          - type: json_parser
+            timestamp:
+              parse_from_field: time
+              layout: '%Y-%m-%dT%H:%M:%S.%fZ'
+            severity:
+              parse_from_field: severity
     processors:
       batch: {}
       resource:
@@ -182,6 +186,6 @@ opentelemetry-collector:
           processors: [batch]
           exporters: [prometheusremotewrite]
         logs:
-          receivers: [otlp, k8s_logs]
+          receivers: [otlp, filelog]
           processors: [batch, resource]
           exporters: [logging, otlphttp]
