@@ -50,6 +50,7 @@ grafana:
           type: elasticsearch
           url: https://log-storage-es-http.monitoring.svc.cluster.local:9200
           access: proxy
+          basicAuth: true
           basicAuthUser: elastic
           basicAuthPassword: /etc/grafana/es-creds/elastic
           jsonData:
