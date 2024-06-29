@@ -1,6 +1,8 @@
+global:
+  deploymentMode: SingleBinary
+
 loki:
   fullnameOverride: loki
-  deploymentMode: SingleBinary
   persistence:
     enabled: true
     storageClassName: "standard"
