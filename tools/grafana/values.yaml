@@ -5,7 +5,7 @@ grafana:
   extraSecretMounts:
     - name: es-certs
       mountPath: /etc/grafana/es-certs
-      secretName: log-storage-es-http-certs-internal
+      secretName: log-storage-es-http-certs-public
   extraLabels:
     elasticsearch-master-http-client: "true"
   service:
@@ -55,5 +55,4 @@ grafana:
             esVersion: 70
             tlsAuth: true
             tlsClientCert: "/etc/grafana/es-certs/tls.crt"
-            tlsClientKey: "/etc/grafana/es-certs/tls.key"
             tlsCaCert: "/etc/grafana/es-certs/ca.crt"
