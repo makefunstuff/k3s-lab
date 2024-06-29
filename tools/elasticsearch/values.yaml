@@ -1,21 +1,19 @@
 elasticsearch:
   replicas: 1
+  minimumMasterNodes: 1
   esJavaOpts: "-Xmx1g -Xms1g"
   volumeClaimTemplate:
     accessModes: [ "ReadWriteOnce" ]
     resources:
       requests:
-        storage: 30Gi
+        storage: 10Gi
   labels:
-    app: elasticsearch-master
+    app.kubernetes.io/name: elasticsearch
   networkPolicy:
     http:
       enabled: true
     transport:
       enabled: true
-  protocol: http
-  httpPort: 9200
-  transportPort: 9300
 
 logstash:
   enabled: true
