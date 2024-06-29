@@ -1,7 +1,6 @@
 loki:
   deploymentMode: SingleBinary
   loki:
-    fullnameOverride: loki
     persistence:
       enabled: true
       storageClassName: "standard"
@@ -22,36 +21,6 @@ loki:
         enabled: false
       storage:
         type: filesystem
-        bucketNames:
-          chunks: "loki-chunks"
-      schemaConfig:
-        configs:
-          - from: 2020-10-24
-            store: boltdb-shipper
-            object_store: filesystem
-            schema: v11
-            index:
-              prefix: index_
-              period: 168h
-      limits_config:
-        enforce_metric_name: false
-        reject_old_samples: true
-        reject_old_samples_max_age: 168h
-      commonConfig:
-        replication_factor: 1
-      ingester:
-        lifecycler:
-          ring:
-            kvstore:
-              store: inmemory
-      distributor:
-        ring:
-          kvstore:
-            store: inmemory
-      ruler:
-        storage:
-          type: local
-        rule_path: /loki/rules-temp
 
 promtail:
   fullnameOverride: promtail
