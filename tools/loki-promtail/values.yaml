@@ -21,13 +21,16 @@ loki:
       tracing:
         enabled: false
       storage:
-        bucketNames:
-          chunks: "loki-chunks"
-          ruler: "loki-ruler"
-          admin: "loki-admin"
-
         type: filesystem
-
+    schemaConfig:
+      configs:
+        - from: 2020-10-24
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 168h
 promtail:
   fullnameOverride: promtail
   config:
