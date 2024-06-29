@@ -1,0 +1,13 @@
+apiVersion: logstash.k8s.elastic.co/v1alpha1
+kind: Logstash
+metadata:
+  name: log-transport
+spec:
+  version: 8.14.1
+  count: 1
+  elasticsearchRefs:
+  - name: log-sttorage
+    clusterName: default
+  config: 
+    pipeline.workers: 4
+    log.level: debug
