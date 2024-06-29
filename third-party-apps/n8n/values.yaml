@@ -1,0 +1,21 @@
+n8n:
+  persistence:
+    enabled: true
+    type: dynamic 
+  ingress:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: automate.topkek.cloud
+        paths: []
+    tls:
+      - secretName: n8n-tls
+        hosts:
+          - automate.topkek.cloud
+    className: "traefik"
+
