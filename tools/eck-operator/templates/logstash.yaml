@@ -18,7 +18,7 @@ spec:
         }
         filter {
           json {
-            source => "message"
+            source => "[_source]"
           }
         }
         output {
