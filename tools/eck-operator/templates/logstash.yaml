@@ -16,6 +16,11 @@ spec:
             port => 5044
           }
         }
+        filter {
+          json {
+            source => "message"
+          }
+        }
         output {
           elasticsearch {
             hosts => [ "${DEFAULT_ES_HOSTS}" ]
