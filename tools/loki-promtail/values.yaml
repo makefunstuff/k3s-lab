@@ -1,26 +1,27 @@
-loki:
-  fullnameOverride: loki
-  deploymentMode: SingleBinary
-  persistence:
-    enabled: true
-    storageClassName: "standard"
-    accessModes:
-      - ReadWriteOnce
-    size: 10Gi
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "256Mi"
-    limits:
-      cpu: "500m"
-      memory: "512Mi"
-  auth_enabled: false  # Add this to ensure auth is disabled if not needed
-  pattern_ingester:
-    enabled: false  # Add this if you do not need the pattern ingester
-  tracing:
-    enabled: false  # Disable tracing if not needed
-  storage:
-    type: filesystem
+loki-service:
+  loki:
+    fullnameOverride: loki
+    deploymentMode: SingleBinary
+    persistence:
+      enabled: true
+      storageClassName: "standard"
+      accessModes:
+        - ReadWriteOnce
+      size: 10Gi
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+    auth_enabled: false
+    pattern_ingester:
+      enabled: false
+    tracing:
+      enabled: false
+    storage:
+      type: filesystem
   
 promtail:
   fullnameOverride: promtail
