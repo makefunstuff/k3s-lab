@@ -11,8 +11,6 @@ spec:
         path: tools/grafana
       - chart: prometheus
         path: tools/prometheus
-      - chart: elasticsearch
-        path: tools/elasticsearch
   template:
     metadata:
       name: '{{chart}}'
