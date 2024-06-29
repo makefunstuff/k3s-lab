@@ -1,7 +1,7 @@
 apiVersion: logstash.k8s.elastic.co/v1alpha1
 kind: Logstash
 metadata:
-  name: log-transport
+  name: log-storage
 spec:
   version: 8.14.1
   count: 1
