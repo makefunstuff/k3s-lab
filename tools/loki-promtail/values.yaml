@@ -1,59 +1,58 @@
 loki:
   deploymentMode: SingleBinary
-  loki:
-    auth_enabled: false
-    analytics:
-      reporting_enabled: false
-    commonConfig:
-      replication_factor: 1
-    ingester:
-      chunk_encoding: snappy
-    storage:
-      type: filesystem
-    schemaConfig:
-      configs:
-        - from: "2024-06-29"
-          store: tsdb
-          object_store: filesystem
-          schema: v13
-          index:
-            prefix: loki_index_
-            period: 24h
-    limits_config:
-      retention_period: 14d
-    mminio:
-      enabled: true
-      serviceAccount:
-        name: "minio-sa-loki"
+  auth_enabled: false
+  analytics:
+    reporting_enabled: false
+  commonConfig:
+    replication_factor: 1
+  ingester:
+    chunk_encoding: snappy
+  storage:
+    type: filesystem
+  schemaConfig:
+    configs:
+      - from: "2024-06-29"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+  limits_config:
+    retention_period: 14d
+  mminio:
+    enabled: true
+    serviceAccount:
+      name: "minio-sa-loki"
 
-    singleBinary:
-      replicas: 1
-      limits:
-        cpu: 3
-        memory: 4Gi
-      requests:
-        cpu: 2
-        memory: 2Gi
-      extraEnv:
-      # Keep a little bit lower than memory limits
-      - name: GOMEMLIMIT
-        value: 3750MiB
-    gateway:
-      replicas: 0
-    backend:
-      replicas: 0
-    read:
-      replicas: 0
-    write:
-      replicas: 0
-    chunksCache:
-      enabled: false
-    resultsCache:
-      enabled: false
-    lokiCanary:
-      enabled: false
-    test:
-      enabled: false
+  singleBinary:
+    replicas: 1
+    limits:
+      cpu: 3
+      memory: 4Gi
+    requests:
+      cpu: 2
+      memory: 2Gi
+    extraEnv:
+    # Keep a little bit lower than memory limits
+    - name: GOMEMLIMIT
+      value: 3750MiB
+  gateway:
+    replicas: 0
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+  chunksCache:
+    enabled: false
+  resultsCache:
+    enabled: false
+  lokiCanary:
+    enabled: false
+  test:
+    enabled: false
 promtail:
   fullnameOverride: promtail
   config:
