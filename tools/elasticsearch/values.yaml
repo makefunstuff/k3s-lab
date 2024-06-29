@@ -1,7 +1,8 @@
 elasticsearch:
+  antiAffinity: "soft"
   sysctlInitContainer:
     enabled: false
-  replicas: 1
+  replicas: 3
   minimumMasterNodes: 1
   esJavaOpts: "-Xmx128m -Xms128m"
   esConfig:
