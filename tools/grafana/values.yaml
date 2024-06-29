@@ -44,5 +44,5 @@ grafana:
           isDefault: true
         - name: Loki
           type: loki
-          url: http://loki:3100
+          url: http://loki.monitoring.svc.cluster.local:3100
           access: proxy
