@@ -2,7 +2,6 @@ global:
   namespace: monitoring
 
 grafana:
-  envFromSecret: log-storage-es-elastic-user
   extraLabels:
     elasticsearch-master-http-client: "true"
   service:
