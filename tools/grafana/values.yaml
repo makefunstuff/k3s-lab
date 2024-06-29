@@ -2,6 +2,10 @@ global:
   namespace: monitoring
 
 grafana:
+  extraVolumes:
+    - name: es-certs
+      secret:
+        secretName: log-storage-es-http-certs-public
   extraLabels:
     elasticsearch-master-http-client: "true"
   service:
@@ -42,7 +46,14 @@ grafana:
           access: proxy
           url: http://prometheus-server.monitoring.svc.cluster.local
           isDefault: true
-        - name: Loki
-          type: loki
-          url: http://loki.monitoring.svc.cluster.local:3100
+        - name: Elasticsearch
+          type: elasticsearch
+          url: http://log-storage-es-http.monitoring.svc.cluster.local:9200
           access: proxy
+          jsonData:
+            timeField: "@timestamp"
+            esVersion: 70
+            tlsAuth: true
+            tlsClientCert: "/etc/grafana/es-certs/tls.crt"
+            tlsClientKey: "/etc/grafana/es-certs/tls.key"
+            tlsCaCert: "/etc/grafana/es-certs/ca.crt"
