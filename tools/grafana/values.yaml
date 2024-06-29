@@ -3,9 +3,9 @@ global:
 
 grafana:
   extraSecretMounts:
-    - name: es-certs
-      mountPath: /etc/grafana/es-certs
-      secretName: log-storage-es-http-certs-public
+    - name: es-creds
+      mountPath: /etc/grafana/es-creds
+      secretName: log-storage-es-elastic-user
   extraLabels:
     elasticsearch-master-http-client: "true"
   service:
@@ -50,9 +50,8 @@ grafana:
           type: elasticsearch
           url: https://log-storage-es-http.monitoring.svc.cluster.local:9200
           access: proxy
+          basicAuthUser: elastic
+          basicAuthPassword: /etc/grafana/es-creds/password
           jsonData:
-            timeField: "@timestamp"
             esVersion: 70
-            tlsAuth: true
-            tlsClientCert: "/etc/grafana/es-certs/tls.crt"
-            tlsCaCert: "/etc/grafana/es-certs/ca.crt"
+            tlsSkipVerify: true
