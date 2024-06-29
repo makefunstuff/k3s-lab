@@ -28,25 +28,33 @@ loki:
 
     singleBinary:
       replicas: 1
-      persistence:
-        enabled: true
-        size: 50Gi
-      gateway:
-        replicas: 0
-      backend:
-        replicas: 0
-      read:
-        replicas: 0
-      write:
-        replicas: 0
-      chunksCache:
-        enabled: false
-      resultsCache:
-        enabled: false
-      lokiCanary:
-        enabled: false
-      test:
-        enabled: false
+        resources:
+      limits:
+        cpu: 3
+        memory: 4Gi
+      requests:
+        cpu: 2
+        memory: 2Gi
+      extraEnv:
+      # Keep a little bit lower than memory limits
+      - name: GOMEMLIMIT
+        value: 3750MiB
+    gateway:
+      replicas: 0
+    backend:
+      replicas: 0
+    read:
+      replicas: 0
+    write:
+      replicas: 0
+    chunksCache:
+      enabled: false
+    resultsCache:
+      enabled: false
+    lokiCanary:
+      enabled: false
+    test:
+      enabled: false
 promtail:
   fullnameOverride: promtail
   config:
