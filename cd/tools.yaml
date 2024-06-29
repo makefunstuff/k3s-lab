@@ -11,6 +11,8 @@ spec:
         path: tools/grafana
       - chart: prometheus
         path: tools/prometheus
+      - chart: loki-promtail
+        path: tools/loki-promtail
   template:
     metadata:
       name: '{{chart}}'
