@@ -2,10 +2,7 @@ global:
   namespace: monitoring
 
 grafana:
-  extraSecretMounts:
-    - name: es-creds
-      mountPath: /etc/grafana/es-creds
-      secretName: log-storage-es-elastic-user
+  envFromSecret: log-storage-es-elastic-user
   extraLabels:
     elasticsearch-master-http-client: "true"
   service:
@@ -51,8 +48,8 @@ grafana:
           url: https://log-storage-es-http.monitoring.svc.cluster.local:9200
           access: proxy
           basicAuth: true
-          basicAuthUser: elastic
-          basicAuthPassword: /etc/grafana/es-creds/elastic
+          basicAuthUser: "elastic"
+          basicAuthPassword: elastic
           jsonData:
             esVersion: 70
             tlsSkipVerify: true
