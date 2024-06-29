@@ -31,7 +31,7 @@ logstash:
   logstashConfig:
     logstash.yml: |
       http.host: "0.0.0.0"
-      xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch-master:9200" ]
+      xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch-master.monitoring.svc.cluster.local:9200" ]
   logstashPipeline:
     logstash.conf: |
       input {
@@ -42,7 +42,7 @@ logstash:
       }
       output {
         elasticsearch {
-          hosts => ["http://elasticsearch-master:9200"]
+          hosts => ["http://elasticsearch-master.monitoring.svc.cluster.local:9200"]
           index => "logstash-%{+YYYY.MM.dd}"
         }
       }
