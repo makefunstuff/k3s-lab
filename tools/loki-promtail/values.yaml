@@ -1,25 +1,26 @@
 loki:
   deploymentMode: SingleBinary
-  auth_enabled: false
-  analytics:
-    reporting_enabled: false
-  commonConfig:
-    replication_factor: 1
-  ingester:
-    chunk_encoding: snappy
-  storage:
-    type: filesystem
-  schemaConfig:
-    configs:
-      - from: "2024-06-29"
-        store: tsdb
-        object_store: filesystem
-        schema: v13
-        index:
-          prefix: loki_index_
-          period: 24h
-  limits_config:
-    retention_period: 14d
+  loki:
+    auth_enabled: false
+    analytics:
+      reporting_enabled: false
+    commonConfig:
+      replication_factor: 1
+    ingester:
+      chunk_encoding: snappy
+    storage:
+      type: filesystem
+    schemaConfig:
+      configs:
+        - from: "2024-06-29"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    limits_config:
+      retention_period: 14d
   mminio:
     enabled: true
     serviceAccount:
