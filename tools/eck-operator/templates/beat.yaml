@@ -2,7 +2,6 @@ apiVersion: beat.k8s.elastic.co/v1beta1
 kind: Beat
 metadata:
   name: log-storage
-  namespace: elastic-system
 spec:
   type: filebeat
   version: 8.14.1
