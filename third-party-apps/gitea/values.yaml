@@ -14,6 +14,6 @@ gitea:
           - path: /
             pathType: Prefix
     tls:
-      - hosts:
+      - secretName: gitea-tls
+        hosts:
           - git.topkek.cloud
-        secretName: gitea-tls
