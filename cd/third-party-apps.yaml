@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: third-party-apps-applicationset
+  namespace: default
+spec:
+  generators:
+  - list:
+      elements:
+      - chart: gitea
+        path: third-party-apps/gitea
+  template:
+    metadata:
+      name: '{{chart}}'
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/makefunstuff/k3s-lab'
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: apps
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+

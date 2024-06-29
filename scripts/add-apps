@@ -3,3 +3,4 @@
 set -e
 
 kubectl apply -f cd/tools.yaml
+kubectl apply -f cd/third-party-apps.yaml
