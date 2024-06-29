@@ -18,6 +18,8 @@ loki:
     enabled: false  # Add this if you do not need the pattern ingester
   tracing:
     enabled: false  # Disable tracing if not needed
+  storage:
+    type: filesystem
 
 promtail:
   fullnameOverride: promtail
