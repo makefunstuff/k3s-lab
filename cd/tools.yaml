@@ -11,8 +11,8 @@ spec:
         path: tools/grafana
       - chart: prometheus
         path: tools/prometheus
-      - chart: loki-promtail
-        path: tools/loki-promtail
+      - chart: eck-operator
+        path: tools/eck-operator
   template:
     metadata:
       name: '{{chart}}'
