@@ -21,6 +21,8 @@ loki:
       enabled: false
     storage:
       type: filesystem
+      bucketNames:
+        chunks: "loki-chunks"
     schemaConfig:
       configs:
         - from: 2020-10-24
