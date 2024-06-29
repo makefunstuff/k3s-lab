@@ -7,3 +7,5 @@ prometheus:
 
   server:
     enabled: true
+  prometheus-node-exporter:
+    enabled: false
