@@ -1,5 +1,4 @@
-global:
-  deploymentMode: SingleBinary
+deploymentMode: SingleBinary
 
 loki:
   fullnameOverride: loki
