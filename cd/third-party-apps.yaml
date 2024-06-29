@@ -9,8 +9,6 @@ spec:
       elements:
       - chart: gitea
         path: third-party-apps/gitea
-      - chart: n8n
-        path: third-party-apps/n8n
   template:
     metadata:
       name: '{{chart}}'
