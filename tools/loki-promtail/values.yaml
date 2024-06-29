@@ -1,9 +1,8 @@
 deploymentMode: SingleBinary
 loki:
-  loki:
-    auth_enabled: false
-    analytics:
-      reporting_enabled: false
+  auth_enabled: false
+  analytics:
+    reporting_enabled: false
     commonConfig:
       replication_factor: 1
     ingester:
@@ -24,7 +23,7 @@ loki:
     mminio:
       enabled: true
       serviceAccount:
-      name: "minio-sa-loki"
+        name: "minio-sa-loki"
 
     singleBinary:
       replicas: 1
