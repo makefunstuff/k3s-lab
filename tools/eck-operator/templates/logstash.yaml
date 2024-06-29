@@ -3,11 +3,34 @@ kind: Logstash
 metadata:
   name: log-storage
 spec:
-  version: "8.14.1"
   count: 1
   elasticsearchRefs:
-  - name: log-storage
-    clusterName: default
-  config: 
-    pipeline.workers: 4
-    log.level: debug
+    - name: log-storage
+      clusterName: default
+  version: 8.14.1
+  pipelines:
+    - pipeline.id: main
+      config.string: |
+        input {
+          beats {
+            port => 5044
+          }
+        }
+        output {
+          elasticsearch {
+            hosts => [ "${QS_ES_HOSTS}" ]
+            user => "${QS_ES_USER}"
+            password => "${QS_ES_PASSWORD}"
+            ssl_certificate_authorities => "${QS_ES_SSL_CERTIFICATE_AUTHORITY}"
+          }
+        }
+  services:
+    - name: beats
+      service:
+        spec:
+          type: NodePort
+          ports:
+            - port: 5044
+              name: "filebeat"
+              protocol: TCP
+              targetPort: 5044
