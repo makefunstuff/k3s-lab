@@ -21,6 +21,11 @@ loki:
       tracing:
         enabled: false
       storage:
+        bucketNames:
+          chunks: "loki-chunks"
+          ruler: "loki-ruler"
+          admin: "loki-admin"
+
         type: filesystem
 
 promtail:
