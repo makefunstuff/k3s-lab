@@ -6,7 +6,7 @@ spec:
   version: 8.14.1
   count: 1
   elasticsearchRefs:
-  - name: log-sttorage
+  - name: log-storage
     clusterName: default
   config: 
     pipeline.workers: 4
