@@ -31,6 +31,9 @@ loki:
         shared_store: filesystem
       filesystem:
         directory: /var/loki/chunks
+      bucketNames:
+        chunks: "loki-chunks"  # Ensure this is set
+        ruler: "loki-ruler"    # Ensure this is set
     limits_config:
       enforce_metric_name: false
       reject_old_samples: true
