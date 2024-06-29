@@ -1,13 +1,12 @@
 loki:
-  loki:
-    fullnameOverride: loki
-    deploymentMode: SingleBinary
-    persistence:
-      enabled: true
-      storageClassName: "standard"
-      accessModes:
-        - ReadWriteOnce
-      size: 10Gi
+  fullnameOverride: loki
+  deploymentMode: SingleBinary
+  persistence:
+    enabled: true
+    storageClassName: "standard"
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
     resources:
       requests:
         cpu: "100m"
