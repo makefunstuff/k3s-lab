@@ -43,13 +43,3 @@ grafana:
           access: proxy
           url: http://prometheus-server.monitoring.svc.cluster.local
           isDefault: true
-        - name: Elasticsearch
-          type: elasticsearch
-          url: https://log-storage-es-http.monitoring.svc.cluster.local:9200
-          access: proxy
-          basicAuth: true
-          basicAuthUser: "elastic"
-          basicAuthPassword: ${elastic}
-          jsonData:
-            esVersion: 70
-            tlsSkipVerify: true
