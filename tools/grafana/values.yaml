@@ -48,7 +48,7 @@ grafana:
           isDefault: true
         - name: Elasticsearch
           type: elasticsearch
-          url: http://log-storage-es-http.monitoring.svc.cluster.local:9200
+          url: https://log-storage-es-http.monitoring.svc.cluster.local:9200
           access: proxy
           jsonData:
             timeField: "@timestamp"
