@@ -49,7 +49,7 @@ grafana:
           access: proxy
           basicAuth: true
           basicAuthUser: "elastic"
-          basicAuthPassword: elastic
+          basicAuthPassword: $elastic
           jsonData:
             esVersion: 70
             tlsSkipVerify: true
