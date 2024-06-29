@@ -1,7 +1,12 @@
 elasticsearch:
+  sysctlInitContainer:
+    enabled: false
   replicas: 1
   minimumMasterNodes: 1
-  esJavaOpts: "-Xmx1g -Xms1g"
+  esJavaOpts: "-Xmx128m -Xms128m"
+  esConfig:
+    elasticsearch.yml: |
+      node.store.allow_mmap: false
   volumeClaimTemplate:
     accessModes: [ "ReadWriteOnce" ]
     resources:
