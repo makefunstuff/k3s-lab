@@ -17,9 +17,3 @@ gitea:
       - hosts:
           - git.topkek.cloud
         secretName: gitea-tls
-  gitea:
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-
