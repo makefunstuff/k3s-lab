@@ -3,7 +3,7 @@ kind: Elasticsearch
 metadata:
   name: log-storage
 spec:
-  version: "8.14.1"
+  version: "7.1.17"
   nodeSets:
   - name: default
     count: 1
