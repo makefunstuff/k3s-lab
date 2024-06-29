@@ -2,10 +2,10 @@ global:
   namespace: monitoring
 
 grafana:
-  extraVolumes:
+  extraSecretMounts:
     - name: es-certs
-      secret:
-        secretName: log-storage-es-http-certs-public
+      mountPath: /etc/grafana/es-certs
+      secretName: log-storage-es-http-certs-internal
   extraLabels:
     elasticsearch-master-http-client: "true"
   service:
