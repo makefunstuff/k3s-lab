@@ -21,10 +21,6 @@ loki:
     enabled: false  # Disable tracing if not needed
   storage:
     type: filesystem
-    bucketNames:
-      chunks: loki-chunks
-      ruler: loki-ruler
-      admin: loki-admin
   
 promtail:
   fullnameOverride: promtail
