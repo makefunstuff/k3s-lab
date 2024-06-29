@@ -51,7 +51,7 @@ grafana:
           url: https://log-storage-es-http.monitoring.svc.cluster.local:9200
           access: proxy
           basicAuthUser: elastic
-          basicAuthPassword: /etc/grafana/es-creds/password
+          basicAuthPassword: /etc/grafana/es-creds/elastic
           jsonData:
             esVersion: 70
             tlsSkipVerify: true
