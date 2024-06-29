@@ -20,7 +20,7 @@ loki:
     enabled: false  # Disable tracing if not needed
   storage:
     type: filesystem
-    bucket_names:
+    bucketNames:
       chunks: loki-chunks
       ruler: loki-ruler
       admin: loki-admin
