@@ -22,7 +22,19 @@ loki:
       enabled: false
     storage:
       type: filesystem
-  
+    ingester:
+      lifecycler:
+        ring:
+          kvstore:
+            store: inmemory
+    distributor:
+      ring:
+        kvstore:
+          store: inmemory
+    ruler:
+      storage:
+        type: local
+
 promtail:
   fullnameOverride: promtail
   config:
