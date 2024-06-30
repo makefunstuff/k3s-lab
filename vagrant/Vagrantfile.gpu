@@ -1,0 +1,59 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64" # Or any other preferred Linux distribution
+  
+  # Configure VM hardware
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "32768"
+    vb.cpus = 4
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.customize ["modifyvm", :id, "--vram", "10240"] # Set VRAM to 10GB
+    vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+  end
+
+  # Provisioning script
+  config.vm.provision "shell", inline: <<-SHELL
+    # Update and install prerequisites
+    sudo apt-get update
+    sudo apt-get install -y curl gnupg build-essential
+
+    # Add NVIDIA package repositories
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distribution/x86_64/7fa2af80.pub
+    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/$distribution/x86_64 /" | sudo tee /etc/apt/sources.list.d/cuda.list
+    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/$distribution/x86_64 /" | sudo tee /etc/apt/sources.list.d/nvidia-ml.list
+
+    # Install NVIDIA drivers and CUDA toolkit
+    sudo apt-get update
+    sudo apt-get install -y cuda
+
+    # Add CUDA to the PATH
+    echo 'export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}' >> ~/.bashrc
+    echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> ~/.bashrc
+    source ~/.bashrc
+
+    # Install Tailscale
+    curl -fsSL https://tailscale.com/install.sh | sh
+
+    # Install K3s
+    curl -sfL https://get.k3s.io | sh -
+
+    # Add your SSH public key (replace with your actual public key)
+    mkdir -p ~/.ssh
+    echo "" >> ~/.ssh/authorized_keys
+    chmod 600 ~/.ssh/authorized_keys
+
+    # Restart SSH service
+    sudo service ssh restart
+
+    # Install NVIDIA container toolkit
+    curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+    sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+
+    # Restart Docker to load the NVIDIA runtime
+    sudo systemctl restart docker
+  SHELL
+end
+
