@@ -16,5 +16,6 @@ ollama:
 
 
   nodeSelector:
+    arch: "amd64"
     gpu: "nvidia"
 
