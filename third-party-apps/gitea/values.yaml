@@ -16,4 +16,23 @@ gitea:
     tls:
       - secretName: gitea-tls
         hosts:
-          - git.topkek.cloud
+     ## @param service.ssh.type Kubernetes service type for ssh traffic
+    ## @param service.ssh.port Port number for ssh traffic
+    ## @param service.ssh.clusterIP ClusterIP setting for ssh autosetup for deployment is None
+    ## @param service.ssh.loadBalancerIP LoadBalancer IP setting
+    ## @param service.ssh.nodePort NodePort for ssh service
+    ## @param service.ssh.externalTrafficPolicy If `service.ssh.type` is `NodePort` or `LoadBalancer`, set this to `Local` to enable source IP preservation
+    ## @param service.ssh.externalIPs External IPs for service
+    ## @param service.ssh.ipFamilyPolicy SSH service dual-stack policy
+    ## @param service.ssh.ipFamilies SSH service dual-stack familiy selection,for dual-stack parameters see official kubernetes [dual-stack concept documentation](https://kubernetes.io/docs/concepts/services-networking/dual-stack/).
+    ## @param service.ssh.hostPort HostPort for ssh service
+    ## @param service.ssh.loadBalancerSourceRanges Source range filter for ssh loadbalancer
+    ## @param service.ssh.annotations SSH service annotations
+    ## @param service.ssh.labels SSH service additional labels
+    service:
+      ssh:
+        type: NodePort
+        port: 22
+        nodePort: 2222
+        externalTrafficPolicy: local
+        hostPort: 2222
