@@ -4,23 +4,38 @@ metadata:
   name: log-storage
 spec:
   type: filebeat
-  version: 8.14.1
+  version: 8.14.0
   elasticsearchRef:
     name: log-storage
   config:
-    filebeat.inputs:
-    - type: container
-      paths:
-      - /var/log/containers/*.log
+    filebeat:
+      autodiscover:
+        providers:
+        - type: kubernetes
+          node: ${NODE_NAME}
+          hints:
+            enabled: true
+            default_config:
+              type: container
+              paths:
+              - /var/log/containers/*${data.kubernetes.container.id}.log
+    processors:
+    - add_cloud_metadata: {}
+    - add_host_metadata: {}
   daemonSet:
     podTemplate:
       spec:
+        serviceAccountName: filebeat
+        automountServiceAccountToken: true
+        terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirstWithHostNet
-        hostNetwork: true
-        securityContext:
-          runAsUser: 0
+        hostNetwork: true # Allows to provide richer host metadata
         containers:
         - name: filebeat
+          securityContext:
+            runAsUser: 0
+            # If using Red Hat OpenShift uncomment this:
+            #privileged: true
           volumeMounts:
           - name: varlogcontainers
             mountPath: /var/log/containers
@@ -28,6 +43,11 @@ spec:
             mountPath: /var/log/pods
           - name: varlibdockercontainers
             mountPath: /var/lib/docker/containers
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
         volumes:
         - name: varlogcontainers
           hostPath:
@@ -38,3 +58,51 @@ spec:
         - name: varlibdockercontainers
           hostPath:
             path: /var/lib/docker/containers
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: filebeat
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources:
+  - namespaces
+  - pods
+  - nodes
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups: ["apps"]
+  resources:
+  - replicasets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups: ["batch"]
+  resources:
+  - jobs
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: filebeat
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: filebeat
+subjects:
+- kind: ServiceAccount
+  name: filebeat
+  namespace: monitoring
+roleRef:
+  kind: ClusterRole
+  name: filebeat
+  apiGroup: rbac.authorization.k8s.io
