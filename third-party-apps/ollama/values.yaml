@@ -1,0 +1,20 @@
+ollama:
+  replicaCount: 1
+
+  ollama:
+    gpu:
+      enabled: true
+
+      type: 'nvidia'
+      number: 1
+
+    models: [llama3]
+
+
+  persistentVolume:
+    enabled: true
+
+
+  nodeSelector:
+    gpu: "nvidia"
+
