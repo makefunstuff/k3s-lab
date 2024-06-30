@@ -8,7 +8,3 @@ ollama:
   persistentVolume:
     enabled: true
 
-
-  nodeSelector:
-    kubernetes.io/arch: "amd64"
-    nvidia.com/gpu: "true"
