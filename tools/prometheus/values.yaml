@@ -1,5 +1,5 @@
 prometheus:
-  node-exporter:
+  prometheus-node-exporter:
     enabled: true
   alertmanager:
     enabled: true
