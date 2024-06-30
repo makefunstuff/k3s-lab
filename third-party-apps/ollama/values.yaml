@@ -11,4 +11,4 @@ ollama:
 
   nodeSelector:
     kubernetes.io/arch: "amd64"
-    nvidia.com/gpu: true
+    nvidia.com/gpu: "true"
