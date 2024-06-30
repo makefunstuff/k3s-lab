@@ -1,11 +1,11 @@
 apiVersion: v2
-name: gitea
-description: A Helm chart for setting up Gitea
+name: ollama
+description: A Helm chart for setting up Ollama
 version: 0.1.0
 appVersion: "1.0"
 
 dependencies:
-  - name: gitea
-    version: 10.2.0
-    repository: "https://dl.gitea.io/charts"
+  - name: ollama
+    version: 0.40.0
+    repository: "https://otwld.github.io/ollama-helm/"
 
