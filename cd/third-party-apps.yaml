@@ -9,8 +9,6 @@ spec:
       elements:
       - chart: gitea
         path: third-party-apps/gitea
-      - chart: ollama
-        path: third-party-apps/ollama
   template:
     metadata:
       name: '{{chart}}'
