@@ -1,0 +1,18 @@
+mastodon:
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: mastodon.topkek.cloud
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: mastodon-tls
+        hosts:
