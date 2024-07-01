@@ -3,6 +3,8 @@ ollama:
 
   ollama:
     models: [llama3]
+    gpu:
+      enable: true
 
 
   persistentVolume:
