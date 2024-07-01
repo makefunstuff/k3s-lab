@@ -7,5 +7,5 @@ appVersion: "1.0"
 dependencies:
   - name: mastodon
     version: 1.0.5
-    repository: "https://charts.codechem.com"
+    repository: "https://charts.codechem.com/codechem/mastodon"
 
