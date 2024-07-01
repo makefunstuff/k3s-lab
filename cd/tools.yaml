@@ -7,6 +7,8 @@ spec:
   generators:
   - list:
       elements:
+      - chart: argocd
+        path: tools/argocd
       - chart: grafana
         path: tools/grafana
       - chart: prometheus
