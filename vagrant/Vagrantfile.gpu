@@ -1,14 +1,11 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/bionic64" # Or any other preferred Linux distribution
+  config.vm.box = "generic/ubuntu2204" # Or any other preferred Linux distribution
   
   # Configure VM hardware
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "32768"
-    vb.cpus = 4
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
-    vb.customize ["modifyvm", :id, "--vram", "10240"] # Set VRAM to 10GB
-    vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
-    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+  config.vm.provider "libvirt" do |virt|
+    virt.memory = 32768
+    virt.cpus = 4
+    virt.pci :bus => '26', :slot => '0', :function => '1'
   end
 
   # Provisioning script
@@ -34,17 +31,6 @@ Vagrant.configure("2") do |config|
 
     # Install Tailscale
     curl -fsSL https://tailscale.com/install.sh | sh
-
-    # Install K3s
-    curl -sfL https://get.k3s.io | sh -
-
-    # Add your SSH public key (replace with your actual public key)
-    mkdir -p ~/.ssh
-    echo "" >> ~/.ssh/authorized_keys
-    chmod 600 ~/.ssh/authorized_keys
-
-    # Restart SSH service
-    sudo service ssh restart
 
     # Install NVIDIA container toolkit
     curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
