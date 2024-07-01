@@ -1,8 +1,8 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/bionic64"
-  
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "16384"
+  config.vm.box = "perk/ubuntu-2204-arm64"
+ 
+  config.vm.provider "qemu" do |vb|
+    vb.memory = "4096"
     vb.cpus = 4
   end
 
