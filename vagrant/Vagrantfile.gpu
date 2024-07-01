@@ -2,10 +2,11 @@ Vagrant.configure("2") do |config|
   config.vm.box = "generic/ubuntu2204" # Or any other preferred Linux distribution
   
   # Configure VM hardware
-  config.vm.provider "libvirt" do |virt|
+  config.vm.provider :libvirt do |virt|
     virt.memory = 32768
     virt.cpus = 4
-    virt.pci :bus => '26', :slot => '0', :function => '1'
+    virt.pci :domain => "0x0000", :bus => '0x26', :slot => '0', :function => '0x0'
+    virt.kvm_hidden = true
   end
 
   # Provisioning script
@@ -14,32 +15,9 @@ Vagrant.configure("2") do |config|
     sudo apt-get update
     sudo apt-get install -y curl gnupg build-essential
 
-    # Add NVIDIA package repositories
-    distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-    sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distribution/x86_64/7fa2af80.pub
-    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/$distribution/x86_64 /" | sudo tee /etc/apt/sources.list.d/cuda.list
-    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/$distribution/x86_64 /" | sudo tee /etc/apt/sources.list.d/nvidia-ml.list
-
-    # Install NVIDIA drivers and CUDA toolkit
-    sudo apt-get update
-    sudo apt-get install -y cuda
-
-    # Add CUDA to the PATH
-    echo 'export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}' >> ~/.bashrc
-    echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> ~/.bashrc
-    source ~/.bashrc
-
     # Install Tailscale
     curl -fsSL https://tailscale.com/install.sh | sh
 
-    # Install NVIDIA container toolkit
-    curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-    distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-    curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-    sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
-
-    # Restart Docker to load the NVIDIA runtime
-    sudo systemctl restart docker
   SHELL
 end
 
