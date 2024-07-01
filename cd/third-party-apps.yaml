@@ -9,9 +9,6 @@ spec:
       elements:
       - chart: gitea
         path: third-party-apps/gitea
-
-      - chart: mastodon
-        path: third-party-apps/mastodon
   template:
     metadata:
       name: '{{chart}}'
