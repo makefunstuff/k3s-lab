@@ -1,13 +1,15 @@
-ollama:
-  replicaCount: 1
-
-  ollama:
-    models: [llama3]
-    gpu:
-      enable: true
-      type: 'nvidia'
-
-
-  persistentVolume:
+open-webui:
+  ingress:
     enabled: true
-
+    class: "traefik"
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: "default"
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    host: "llm.topkek.cloud"
+    tls:
+      - hosts:
+          - llm.topkek.cloud
+        secretName: llm-tls
