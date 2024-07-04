@@ -6,11 +6,11 @@ metadata:
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: apache
+  name: nginx
   namespace: kube-system
 spec:
   repo: https://charts.bitnami.com/bitnami
-  chart: apache
+  chart: nginx
   targetNamespace: web
   valuesContent: |-
     service:
