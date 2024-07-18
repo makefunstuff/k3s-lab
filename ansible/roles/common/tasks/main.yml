@@ -1,0 +1,11 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - git
+    state: present
+    update_cache: yes

@@ -1,0 +1,7 @@
+sourcehut.example.com {
+  reverse_proxy localhost:8000
+}
+git.example.com {
+  reverse_proxy localhost:2222
+}
+

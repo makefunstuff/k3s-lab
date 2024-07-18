@@ -1,0 +1,33 @@
+---
+- name: Clone SourceHut repositories
+  git:
+    repo: '{{ item }}'
+    dest: '/opt/sourcehut/{{ item | basename }}'
+  with_items:
+    - https://git.sr.ht/~sircmpwn/builds.sr.ht
+    - https://git.sr.ht/~sircmpwn/dispatch.sr.ht
+    - https://git.sr.ht/~sircmpwn/git.sr.ht
+    - https://git.sr.ht/~sircmpwn/hg.sr.ht
+    - https://git.sr.ht/~sircmpwn/lists.sr.ht
+    - https://git.sr.ht/~sircmpwn/meta.sr.ht
+    - https://git.sr.ht/~sircmpwn/mle.sr.ht
+    - https://git.sr.ht/~sircmpwn/patches.sr.ht
+    - https://git.sr.ht/~sircmpwn/paste.sr.ht
+    - https://git.sr.ht/~sircmpwn/todo.sr.ht
+
+- name: Configure SourceHut services
+  shell: |
+    cd /opt/sourcehut/{{ item | basename }}
+    docker-compose up -d
+  with_items:
+    - https://git.sr.ht/~sircmpwn/builds.sr.ht
+    - https://git.sr.ht/~sircmpwn/dispatch.sr.ht
+    - https://git.sr.ht/~sircmpwn/git.sr.ht
+    - https://git.sr.ht/~sircmpwn/hg.sr.ht
+    - https://git.sr.ht/~sircmpwn/lists.sr.ht
+    - https://git.sr.ht/~sircmpwn/meta.sr.ht
+    - https://git.sr.ht/~sircmpwn/mle.sr.ht
+    - https://git.sr.ht/~sircmpwn/patches.sr.ht
+    - https://git.sr.ht/~sircmpwn/paste.sr.ht
+    - https://git.sr.ht/~sircmpwn/todo.sr.ht
+

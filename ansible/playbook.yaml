@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - common
+    - docker
+    - docker-compose
+    - caddy
+    - sourcehut
+    - soft-serve
