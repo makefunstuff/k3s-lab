@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Number of nodes to create
+NUM_NODES=3
+BASE_IMAGE="ubuntu-18.04-minimal-cloudimg-amd64.img"
+NETWORK="default"
+MEMORY=2048
+VCPUS=2
+
+# Generate cloud-init ISO for each node
+for i in $(seq 1 $NUM_NODES); do
+  VM_NAME="k3s-node-$i"
+  CLOUD_INIT_DIR="cloud-init-$VM_NAME"
+  mkdir -p $CLOUD_INIT_DIR
+
+  cat <<EOF > $CLOUD_INIT_DIR/meta-data
+instance-id: $VM_NAME
+local-hostname: $VM_NAME
+EOF
+
+  cp user-data $CLOUD_INIT_DIR/
+
+  # Create cloud-init ISO
+  genisoimage -output $CLOUD_INIT_DIR/cloud-init.iso -volid cidata -joliet -rock $CLOUD_INIT_DIR/user-data $CLOUD_INIT_DIR/meta-data
+
+  # Create VM
+  virt-install \
+    --name $VM_NAME \
+    --memory $MEMORY \
+    --vcpus $VCPUS \
+    --disk size=10,backing_store=$BASE_IMAGE \
+    --disk path=$CLOUD_INIT_DIR/cloud-init.iso,device=cdrom \
+    --os-type linux \
+    --os-variant ubuntu18.04 \
+    --network network=$NETWORK \
+    --graphics none \
+    --console pty,target_type=serial \
+    --import \
+    --noautoconsole
+
+  echo "Created VM $VM_NAME"
+done
+
+# Wait for VMs to boot up and install K3s
+sleep 60
+
+# Get the IP address of the master node
+MASTER_IP=$(virsh domifaddr k3s-node-1 | grep -oP '(\d+\.\d+\.\d+\.\d+)' | head -1)
+
+# Set up the master node
+ssh ubuntu@$MASTER_IP "curl -sfL https://get.k3s.io | sh -"
+
+# Get the K3s token from the master node
+K3S_TOKEN=$(ssh ubuntu@$MASTER_IP "sudo cat /var/lib/rancher/k3s/server/node-token")
+
+# Set up the worker nodes
+for i in $(seq 2 $NUM_NODES); do
+  NODE_IP=$(virsh domifaddr k3s-node-$i | grep -oP '(\d+\.\d+\.\d+\.\d+)' | head -1)
+  ssh ubuntu@$NODE_IP "curl -sfL https://get.k3s.io | K3S_URL=https://$MASTER_IP:6443 K3S_TOKEN=$K3S_TOKEN sh -"
+  echo "Joined k3s-node-$i to the cluster"
+done
+
+echo "K3s cluster setup completed. Master node IP: $MASTER_IP"
+

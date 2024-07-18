@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Function to print messages
+print_message() {
+    echo "===================================================================="
+    echo "$1"
+    echo "===================================================================="
+}
+
+# Update the system
+print_message "Updating the system..."
+sudo pacman -Syu --noconfirm
+
+# Install necessary packages
+print_message "Installing necessary packages..."
+sudo pacman -S --noconfirm qemu libvirt virt-manager dnsmasq bridge-utils
+
+# Enable and start the libvirtd service
+print_message "Enabling and starting libvirtd service..."
+sudo systemctl enable libvirtd.service
+sudo systemctl start libvirtd.service
+
+# Add the current user to the libvirt group
+CURRENT_USER=$(whoami)
+print_message "Adding $CURRENT_USER to the libvirt group..."
+sudo usermod -aG libvirt $CURRENT_USER
+
+# Verify virtualization support
+print_message "Verifying virtualization support..."
+VIRT_SUPPORT=$(egrep -c '(vmx|svm)' /proc/cpuinfo)
+if [ "$VIRT_SUPPORT" -gt 0 ]; then
+    echo "Virtualization is supported."
+else
+    echo "Virtualization is not supported. Please enable it in your BIOS/UEFI settings."
+    exit 1
+fi
+
+# Check if the default network is active and start it if not
+print_message "Checking and starting default network..."
+DEFAULT_NET_STATUS=$(sudo virsh net-list --all | grep default | awk '{print $2}')
+if [ "$DEFAULT_NET_STATUS" != "active" ]; then
+    sudo virsh net-start default
+    sudo virsh net-autostart default
+fi
+
+# Print final message
+print_message "KVM setup is complete. Please log out and log back in to apply the user group changes."
+
